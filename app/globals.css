@@ -1,0 +1,182 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+  /* Убрал JavaScript код из CSS и добавил только CSS переменные */
+  color-scheme: light;
+  /* Updated color scheme for users 30+ - calmer, more readable */
+  --background: #ffffff; /* Pure white background */
+  --foreground: #374151; /* Dark gray text for better readability */
+  --card: #f8fafc; /* Light gray card background */
+  --card-foreground: #1f2937; /* Darker text on cards */
+  --popover: #ffffff; /* White popover */
+  --popover-foreground: #374151; /* Dark gray popover text */
+  --primary: #374151; /* Professional dark gray primary */
+  --primary-foreground: #ffffff; /* White text on primary */
+  --secondary: #6366f1; /* Calming blue secondary */
+  --secondary-foreground: #ffffff; /* White text on secondary */
+  --muted: #f8fafc; /* Light gray muted background */
+  --muted-foreground: #1f2937; /* Dark muted text */
+  --accent: #6366f1; /* Blue accent for highlights */
+  --accent-foreground: #ffffff; /* White accent text */
+  --destructive: #dc2626; /* Red for destructive actions */
+  --destructive-foreground: #ffffff; /* White destructive text */
+  --border: #e5e7eb; /* Light gray border */
+  --input: #ffffff; /* White input background */
+  --ring: rgba(99, 102, 241, 0.5); /* Blue focus ring */
+  --chart-1: #6366f1; /* Blue chart color */
+  --chart-2: #dc2626; /* Red chart color */
+  --chart-3: #ea580c; /* Orange chart color */
+  --chart-4: #f59e0b; /* Yellow chart color */
+  --chart-5: #4b5563; /* Gray chart color */
+  --radius: 0.5rem;
+  --sidebar: #f8fafc; /* Light gray sidebar */
+  --sidebar-foreground: #1f2937; /* Dark sidebar text */
+  --sidebar-primary: #374151; /* Dark gray sidebar primary */
+  --sidebar-primary-foreground: #ffffff; /* White sidebar primary text */
+  --sidebar-accent: #6366f1; /* Blue sidebar accent */
+  --sidebar-accent-foreground: #ffffff; /* White sidebar accent text */
+  --sidebar-border: #e5e7eb; /* Light gray sidebar border */
+  --sidebar-ring: rgba(99, 102, 241, 0.5); /* Blue sidebar ring */
+  --font-open-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-montserrat: "Montserrat", ui-serif, Georgia, serif;
+}
+
+.dark {
+  color-scheme: dark;
+  /* Dark theme optimized for 30+ users - higher contrast, easier on eyes */
+  --background: #1f2937; /* Dark blue-gray background */
+  --foreground: #f9fafb; /* Light text for high contrast */
+  --card: #374151; /* Medium gray card */
+  --card-foreground: #f9fafb; /* Light card text */
+  --popover: #374151; /* Medium gray popover */
+  --popover-foreground: #f9fafb; /* Light popover text */
+  --primary: #6366f1; /* Blue primary in dark mode */
+  --primary-foreground: #ffffff; /* White text on primary */
+  --secondary: #4b5563; /* Gray secondary */
+  --secondary-foreground: #f9fafb; /* Light secondary text */
+  --muted: #374151; /* Medium gray muted */
+  --muted-foreground: #d1d5db; /* Light gray muted text */
+  --accent: #6366f1; /* Blue accent */
+  --accent-foreground: #ffffff; /* White accent text */
+  --destructive: #ef4444; /* Brighter red for visibility */
+  --destructive-foreground: #ffffff; /* White destructive text */
+  --border: #4b5563; /* Gray border */
+  --input: #374151; /* Gray input */
+  --ring: rgba(99, 102, 241, 0.6); /* Brighter blue ring */
+  --chart-1: #6366f1; /* Blue chart */
+  --chart-2: #ef4444; /* Red chart */
+  --chart-3: #f97316; /* Orange chart */
+  --chart-4: #eab308; /* Yellow chart */
+  --chart-5: #9ca3af; /* Light gray chart */
+  --sidebar: #1f2937; /* Dark sidebar */
+  --sidebar-foreground: #f9fafb; /* Light sidebar text */
+  --sidebar-primary: #6366f1; /* Blue sidebar primary */
+  --sidebar-primary-foreground: #ffffff; /* White sidebar primary text */
+  --sidebar-accent: #374151; /* Gray sidebar accent */
+  --sidebar-accent-foreground: #f9fafb; /* Light sidebar accent text */
+  --sidebar-border: #4b5563; /* Gray sidebar border */
+  --sidebar-ring: rgba(99, 102, 241, 0.6); /* Blue sidebar ring */
+  --font-open-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-montserrat: "Montserrat", ui-serif, Georgia, serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Enhanced typography for 30+ users */
+  --font-sans: var(--font-open-sans);
+  --font-serif: var(--font-montserrat);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@layer base {
+  /* Добавил стили для предотвращения мигания только CSS */
+  html {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* Increased base font size for better readability for 30+ users */
+    font-size: 1.125rem; /* 18px base instead of 16px */
+    line-height: 1.6; /* Increased line height for easier reading */
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  /* Enhanced typography hierarchy for 30+ users */
+  h1 {
+    @apply text-4xl md:text-5xl font-bold;
+    line-height: 1.2;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-semibold;
+    line-height: 1.3;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-semibold;
+    line-height: 1.4;
+  }
+
+  /* Improved button accessibility for 30+ users */
+  button,
+  .btn {
+    min-height: 44px; /* Minimum touch target size */
+    min-width: 44px;
+    @apply px-6 py-3 text-lg; /* Larger padding and text */
+  }
+
+  /* Enhanced link visibility */
+  a {
+    @apply underline-offset-4;
+  }
+
+  /* Improved form elements for better usability */
+  input,
+  textarea,
+  select {
+    @apply text-lg px-4 py-3; /* Larger text and padding */
+    min-height: 44px;
+  }
+}
