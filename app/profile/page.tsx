@@ -24,6 +24,7 @@ import {
   Award,
   Activity,
 } from "lucide-react"
+import { translations } from "@/lib/i18n"
 
 export default function ProfilePage() {
   const { user, isLoading } = useAuth()
@@ -111,7 +112,8 @@ export default function ProfilePage() {
   ]
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("ru-RU", {
+    const locale = t === translations.ru ? "ru-RU" : t === translations.sk ? "sk-SK" : "en-US"
+    return new Date(dateString).toLocaleDateString(locale, {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -122,9 +124,9 @@ export default function ProfilePage() {
     const hours = Math.floor(minutes / 60)
     const remainingMinutes = minutes % 60
     if (hours > 0) {
-      return `${hours}ч ${remainingMinutes}м`
+      return `${hours}${t.profile.hours} ${remainingMinutes}${t.profile.minutes}`
     }
-    return `${remainingMinutes}м`
+    return `${remainingMinutes}${t.profile.minutes}`
   }
 
   return (
@@ -155,7 +157,9 @@ export default function ProfilePage() {
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4" />
-                      <span>С {formatDate(user.registeredAt)}</span>
+                      <span>
+                        {t.profile.memberSince} {formatDate(user.registeredAt)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -181,7 +185,7 @@ export default function ProfilePage() {
                     <p className="text-xs text-muted-foreground">
                       {experienceLevel.nextLevel
                         ? `${t.experience.experienceToNext}: ${experienceLevel.nextLevel - user.experience}`
-                        : "Максимальный уровень достигнут"}
+                        : t.profile.maxLevelReached}
                     </p>
                   </CardContent>
                 </Card>
@@ -204,18 +208,20 @@ export default function ProfilePage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{unlockedBlocks.filter((block) => block.unlocked).length}</div>
-                    <p className="text-xs text-muted-foreground">Из {unlockedBlocks.length} доступных</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t.profile.outOf} {unlockedBlocks.length} {t.profile.available}
+                    </p>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Серия дней</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t.profile.streakDays}</CardTitle>
                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{readingStats.streakDays}</div>
-                    <p className="text-xs text-muted-foreground">Дней подряд изучаете</p>
+                    <p className="text-xs text-muted-foreground">{t.profile.daysInARow}</p>
                   </CardContent>
                 </Card>
               </div>
@@ -229,7 +235,7 @@ export default function ProfilePage() {
                       {t.experience.progress} {t.experience.nextLevel}
                     </CardTitle>
                     <CardDescription>
-                      {experienceLevel.nextLevel - user.experience} {t.experience.experienceShort} до уровня "
+                      {experienceLevel.nextLevel - user.experience} {t.experience.experienceShort} {t.profile.toLevel} "
                       {getExperienceLevel(experienceLevel.nextLevel).level}"
                     </CardDescription>
                   </CardHeader>
@@ -254,7 +260,7 @@ export default function ProfilePage() {
                     <Award className="h-5 w-5" />
                     {t.experience.unlockedContent}
                   </CardTitle>
-                  <CardDescription>Блоки, которые вы разблокировали своим прогрессом</CardDescription>
+                  <CardDescription>{t.profile.blocksUnlockedByProgress}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -271,7 +277,7 @@ export default function ProfilePage() {
                               {block.name}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              Требуется: {block.experience} {t.experience.experienceShort}
+                              {t.profile.required}: {block.experience} {t.experience.experienceShort}
                             </p>
                           </div>
                         </div>
@@ -298,7 +304,7 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <User className="h-5 w-5" />
-                      Личная информация
+                      {t.profile.personalInfo}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -311,11 +317,11 @@ export default function ProfilePage() {
                       <p className="font-medium">{user.email}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Дата регистрации</label>
+                      <label className="text-sm font-medium text-muted-foreground">{t.profile.registrationDate}</label>
                       <p className="font-medium">{formatDate(user.registeredAt)}</p>
                     </div>
                     <Button variant="outline" className="w-full bg-transparent">
-                      Редактировать профиль
+                      {t.profile.editProfile}
                     </Button>
                   </CardContent>
                 </Card>
@@ -324,14 +330,14 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Activity className="h-5 w-5" />
-                      Активность
+                      {t.profile.activity}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Последняя активность</label>
+                      <label className="text-sm font-medium text-muted-foreground">{t.profile.lastActivity}</label>
                       <p className="font-medium">
-                        {readingStats.lastReadDate ? formatDate(readingStats.lastReadDate) : "Нет данных"}
+                        {readingStats.lastReadDate ? formatDate(readingStats.lastReadDate) : t.profile.noData}
                       </p>
                     </div>
                     <div>
@@ -341,11 +347,11 @@ export default function ProfilePage() {
                       <p className="font-medium">{formatReadingTime(readingStats.totalReadingTime)}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Изученных блоков</label>
+                      <label className="text-sm font-medium text-muted-foreground">{t.profile.studiedBlocks}</label>
                       <p className="font-medium">{readingStats.articlesRead}</p>
                     </div>
                     <Button variant="outline" className="w-full bg-transparent">
-                      Сбросить статистику
+                      {t.profile.resetStats}
                     </Button>
                   </CardContent>
                 </Card>
