@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { useAuth } from "@/contexts/auth-context"
+import { useLocale } from "@/hooks/use-locale"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -27,6 +28,7 @@ import {
 export default function ProfilePage() {
   const { user, isLoading } = useAuth()
   const router = useRouter()
+  const { t } = useLocale()
   const [readingStats, setReadingStats] = useState({
     totalReadingTime: 0,
     articlesRead: 0,
@@ -42,7 +44,6 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
-      // Загружаем статистику чтения из localStorage
       const stats = localStorage.getItem(`reading-stats-${user.id}`)
       if (stats) {
         setReadingStats(JSON.parse(stats))
@@ -57,7 +58,7 @@ export default function ProfilePage() {
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p>Загрузка...</p>
+            <p>{t.common.loading}</p>
           </div>
         </main>
         <Footer />
@@ -79,11 +80,11 @@ export default function ProfilePage() {
   }
 
   const getExperienceLevel = (experience: number) => {
-    if (experience < 10) return { level: "Новичок", color: "bg-gray-500", nextLevel: 10 }
-    if (experience < 25) return { level: "Изучающий", color: "bg-blue-500", nextLevel: 25 }
-    if (experience < 50) return { level: "Практик", color: "bg-green-500", nextLevel: 50 }
-    if (experience < 100) return { level: "Эксперт", color: "bg-purple-500", nextLevel: 100 }
-    return { level: "Мастер", color: "bg-gold-500", nextLevel: null }
+    if (experience < 10) return { level: t.experience.level + " 1", color: "bg-gray-500", nextLevel: 10 }
+    if (experience < 25) return { level: t.experience.level + " 2", color: "bg-blue-500", nextLevel: 25 }
+    if (experience < 50) return { level: t.experience.level + " 3", color: "bg-green-500", nextLevel: 50 }
+    if (experience < 100) return { level: t.experience.level + " 4", color: "bg-purple-500", nextLevel: 100 }
+    return { level: t.experience.level + " 5", color: "bg-gold-500", nextLevel: null }
   }
 
   const experienceLevel = getExperienceLevel(user.experience)
@@ -101,12 +102,12 @@ export default function ProfilePage() {
     : 100
 
   const unlockedBlocks = [
-    { name: "Основы здорового питания", experience: 0, unlocked: true },
-    { name: "Кардиотренировки для начинающих", experience: 5, unlocked: user.experience >= 5 },
-    { name: "Управление стрессом", experience: 10, unlocked: user.experience >= 10 },
-    { name: "Силовые тренировки дома", experience: 15, unlocked: user.experience >= 15 },
-    { name: "Профилактика сердечно-сосудистых заболеваний", experience: 25, unlocked: user.experience >= 25 },
-    { name: "Здоровое старение", experience: 35, unlocked: user.experience >= 35 },
+    { name: t.informationBlocks.basicNutrition.title, experience: 0, unlocked: true },
+    { name: t.informationBlocks.exerciseBasics.title, experience: 5, unlocked: user.experience >= 5 },
+    { name: t.informationBlocks.stressManagement.title, experience: 10, unlocked: user.experience >= 10 },
+    { name: t.informationBlocks.heartHealth.title, experience: 15, unlocked: user.experience >= 15 },
+    { name: t.informationBlocks.sleepHygiene.title, experience: 25, unlocked: user.experience >= 25 },
+    { name: t.informationBlocks.mentalWellness.title, experience: 35, unlocked: user.experience >= 35 },
   ]
 
   const formatDate = (dateString: string) => {
@@ -140,14 +141,17 @@ export default function ProfilePage() {
                 </Avatar>
 
                 <div className="flex-1 text-center sm:text-left">
-                  <h1 className="text-3xl font-bold mb-2">{user.name}</h1>
+                  <h1 className="text-3xl font-bold mb-2">{t.auth.myProfile}</h1>
+                  <p className="text-lg font-medium mb-2">{user.name}</p>
                   <p className="text-muted-foreground mb-4">{user.email}</p>
 
                   <div className="flex flex-wrap items-center gap-4 justify-center sm:justify-start">
                     <Badge className={`${experienceLevel.color} text-white`}>{experienceLevel.level}</Badge>
                     <div className="flex items-center gap-2">
                       <Trophy className="h-4 w-4 text-primary" />
-                      <span className="font-semibold">{user.experience} опыта</span>
+                      <span className="font-semibold">
+                        {user.experience} {t.experience.experienceShort}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4" />
@@ -164,19 +168,19 @@ export default function ProfilePage() {
         <section className="py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-2xl font-bold mb-8 text-center">Статистика обучения</h2>
+              <h2 className="text-2xl font-bold mb-8 text-center">{t.experience.learningStats}</h2>
 
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Общий опыт</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t.experience.experience}</CardTitle>
                     <Trophy className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{user.experience}</div>
                     <p className="text-xs text-muted-foreground">
                       {experienceLevel.nextLevel
-                        ? `До следующего уровня: ${experienceLevel.nextLevel - user.experience}`
+                        ? `${t.experience.experienceToNext}: ${experienceLevel.nextLevel - user.experience}`
                         : "Максимальный уровень достигнут"}
                     </p>
                   </CardContent>
@@ -184,18 +188,18 @@ export default function ProfilePage() {
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Время чтения</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t.experience.readingTime}</CardTitle>
                     <Clock className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">{formatReadingTime(readingStats.totalReadingTime)}</div>
-                    <p className="text-xs text-muted-foreground">Всего потрачено на изучение</p>
+                    <p className="text-xs text-muted-foreground">{t.experience.totalReadingTime}</p>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Изучено блоков</CardTitle>
+                    <CardTitle className="text-sm font-medium">{t.experience.blocksUnlocked}</CardTitle>
                     <BookOpen className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
@@ -222,10 +226,10 @@ export default function ProfilePage() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Target className="h-5 w-5" />
-                      Прогресс до следующего уровня
+                      {t.experience.progress} {t.experience.nextLevel}
                     </CardTitle>
                     <CardDescription>
-                      {experienceLevel.nextLevel - user.experience} опыта до уровня "
+                      {experienceLevel.nextLevel - user.experience} {t.experience.experienceShort} до уровня "
                       {getExperienceLevel(experienceLevel.nextLevel).level}"
                     </CardDescription>
                   </CardHeader>
@@ -248,7 +252,7 @@ export default function ProfilePage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Award className="h-5 w-5" />
-                    Доступный контент
+                    {t.experience.unlockedContent}
                   </CardTitle>
                   <CardDescription>Блоки, которые вы разблокировали своим прогрессом</CardDescription>
                 </CardHeader>
@@ -266,11 +270,13 @@ export default function ProfilePage() {
                             <p className={`font-medium ${!block.unlocked ? "text-muted-foreground" : ""}`}>
                               {block.name}
                             </p>
-                            <p className="text-sm text-muted-foreground">Требуется: {block.experience} опыта</p>
+                            <p className="text-sm text-muted-foreground">
+                              Требуется: {block.experience} {t.experience.experienceShort}
+                            </p>
                           </div>
                         </div>
                         <Badge variant={block.unlocked ? "default" : "secondary"}>
-                          {block.unlocked ? "Разблокировано" : "Заблокировано"}
+                          {block.unlocked ? t.experience.unlocked : t.experience.locked}
                         </Badge>
                       </div>
                     ))}
@@ -285,7 +291,7 @@ export default function ProfilePage() {
         <section className="py-12 bg-muted/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold mb-8 text-center">Настройки аккаунта</h2>
+              <h2 className="text-2xl font-bold mb-8 text-center">{t.experience.accountSettings}</h2>
 
               <div className="grid gap-6 sm:grid-cols-2">
                 <Card>
@@ -297,11 +303,11 @@ export default function ProfilePage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Имя</label>
+                      <label className="text-sm font-medium text-muted-foreground">{t.auth.name}</label>
                       <p className="font-medium">{user.name}</p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Email</label>
+                      <label className="text-sm font-medium text-muted-foreground">{t.auth.email}</label>
                       <p className="font-medium">{user.email}</p>
                     </div>
                     <div>
@@ -329,7 +335,9 @@ export default function ProfilePage() {
                       </p>
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-muted-foreground">Общее время изучения</label>
+                      <label className="text-sm font-medium text-muted-foreground">
+                        {t.experience.totalReadingTime}
+                      </label>
                       <p className="font-medium">{formatReadingTime(readingStats.totalReadingTime)}</p>
                     </div>
                     <div>
